@@ -7,7 +7,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-# define BUF_SIZE 1000000
+# define BUF_SIZE 1000
 # define MAX_FD 7800
 
 char		*gnl_strchr(const char *s, int c);
