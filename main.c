@@ -8,7 +8,10 @@ int	main(int ac, char **av)
 
 	(void)ac;
 	fd = open(av[1], O_RDONLY);
-	printf("%d", get_next_line(fd, &line));
+
+	while (get_next_line(fd, &line))
+		printf("%s\n", line);
+	/*printf("%d", get_next_line(fd, &line));
 	printf("%s\n", line);
 	printf("%d", get_next_line(fd, &line));
 	printf("%s\n", line);
@@ -29,6 +32,6 @@ int	main(int ac, char **av)
 	printf("%d", get_next_line(fd, &line));
 	printf("%s\n", line);
 	printf("%d", get_next_line(fd, &line));
-	printf("%s\n", line);
+	printf("%s\n", line);*/
 	return (0);
 }

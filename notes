@@ -1,8 +1,5 @@
-aaaaaaaaaaaaaaaaaaaa
-bbbbbbbbbb
-ccccccccccccccc
+A FAIRE:
 
-dddddd
-
-
-eeeeeeeeeeeeeee
+-bien vérifier valeurs de retour, que faire si derniere ligne + EOF
+-leaks
+-nbr lignes fonctions, tt ce qui concerne norme

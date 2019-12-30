@@ -43,8 +43,8 @@ int	reader(int fd, char **line, char **rest)
 
 	gnl_memset(buf, '\0', BUF_SIZE + 1);
 	ret = read(fd, buf, BUF_SIZE);
-	printf(" rest : %s, ret : %d\n", *rest, ret);
-	if (*rest == NULL && (ret == 0 || ret == -1))
+//	printf(" rest : %s, ret : %d\n", *rest, ret);
+	if ((*rest == NULL || *rest[0] == '\0') && (ret == 0 || ret == -1))
 		return (ret);
 //	printf("rest : %s\n", *rest);
 //	printf("buf : %s\n", buf);
