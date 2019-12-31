@@ -35,7 +35,7 @@ char	*gnl_strnew(size_t size)
 	return (str);
 }
 
-char	*gnl_strjoin(char const *s1, char const *s2)
+char	*gnl_strjoin(char **s1, char const *s2, int fr)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -44,26 +44,25 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 	i = 0;
 	j = 0;
 
-//	printf("s1 : %s,  s2 : %s\n", s1, s2);
-	if (s1 == NULL && s2 != NULL)
+	if (*s1 == NULL && s2 != NULL)
 		return (gnl_strdup(s2));
-	if (s1 != NULL && s2 == NULL)
-		return (gnl_strdup(s1));
-	scat = gnl_strnew(gnl_strlen(s1) + gnl_strlen(s2));
+	if (*s1 != NULL && s2 == NULL)
+		return (gnl_strdup(*s1));
+	scat = gnl_strnew(gnl_strlen(*s1) + gnl_strlen(s2));
 	if (scat == NULL)
 		return (NULL);
-	while (*s1 != '\0')
-	{
-		scat[j] = *s1++;
-		j++;
-	}
+	while ((*s1)[i] != '\0')
+		scat[j++] = (*s1)[i++];
+	i = 0;
 	while (s2[i])
-	{
-		scat[j] = s2[i];
-		i++;
-		j++;
-	}
+		scat[j++] = s2[i++];
 	scat[j] = '\0';
+//	printf("scat : %s", scat);
+	if (fr == 1)
+	{
+		free(*s1);
+		*s1 = NULL;
+	}
 	return (scat);
 }
 

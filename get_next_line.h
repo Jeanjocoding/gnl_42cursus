@@ -7,12 +7,12 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-# define BUF_SIZE 1000
+//# define BUFFER_SIZE 32
 # define MAX_FD 7800
 
 char		*gnl_strchr(const char *s, int c);
 char		*gnl_strnew(size_t size);
-char		*gnl_strjoin(char const *s1, char const *s2);
+char		*gnl_strjoin(char **s1, char const *s2, int fr);
 char		*gnl_strdup(const char *s1);
 void		*gnl_memset(void *b, int c, size_t len);
 int		get_next_line(int fd, char **line);

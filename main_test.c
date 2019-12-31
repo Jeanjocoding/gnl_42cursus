@@ -12,7 +12,7 @@ int	main(int ac, char **av)
 	while (get_next_line(fd, &line))
 	{
 //		sleep(5);
-		printf("%s\n", line);
+//		printf("%s\n", line);
 		free(line);
 //		line = NULL;
 //		char	*line;
