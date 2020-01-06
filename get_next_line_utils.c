@@ -1,5 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
+/*   Updated: 2020/01/06 12:50:25 by tlucille         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-#include <stdio.h>
+
+size_t	gnl_strlen(const char *str)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 char	*gnl_strchr(const char *s, int c)
 {
@@ -19,22 +40,6 @@ char	*gnl_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*gnl_strnew(size_t size)
-{
-	char			*str;
-	unsigned int	i;
-
-	i = 0;
-	if (!(str = (char*)malloc(sizeof(char) * (size + 1))))
-		return (NULL);
-	while (i < (size + 1))
-	{
-		str[i] = '\0';
-		i++;
-	}
-	return (str);
-}
-
 char	*gnl_strjoin(char **s1, char const *s2, int fr)
 {
 	unsigned int	i;
@@ -43,13 +48,12 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 
 	i = 0;
 	j = 0;
-
 	if (*s1 == NULL && s2 != NULL)
 		return (gnl_strdup(s2));
 	if (*s1 != NULL && s2 == NULL)
 		return (gnl_strdup(*s1));
-	scat = gnl_strnew(gnl_strlen(*s1) + gnl_strlen(s2));
-	if (scat == NULL)
+	if (!(scat = (char*)malloc(sizeof(char) *
+		(gnl_strlen(*s1) + gnl_strlen(s2)) + 1)))
 		return (NULL);
 	while ((*s1)[i] != '\0')
 		scat[j++] = (*s1)[i++];
@@ -57,7 +61,6 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 	while (s2[i])
 		scat[j++] = s2[i++];
 	scat[j] = '\0';
-//	printf("scat : %s", scat);
 	if (fr == 1)
 	{
 		free(*s1);
@@ -70,7 +73,7 @@ char	*gnl_strdup(const char *s1)
 {
 	unsigned int	i;
 	unsigned int	len;
-	char		*mlc;
+	char			*mlc;
 
 	i = 0;
 	len = gnl_strlen(s1);
