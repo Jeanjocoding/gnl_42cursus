@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/06 12:46:21 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/06 17:12:26 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ int		reader(int fd, char **line, char **rest)
 	gnl_memset(buf, '\0', BUFFER_SIZE + 1);
 	ret = read(fd, buf, BUFFER_SIZE);
 	if ((*rest == NULL || *rest[0] == '\0') && (ret == 0 || ret == -1))
+	{
+		*line = NULL;
 		return (ret);
+	}
 	if (!(str = gnl_strjoin(rest, buf, 1)))
 		return (-1);
 	while (ret && gnl_strchr(str, '\n') == NULL)
