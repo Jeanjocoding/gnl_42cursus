@@ -6,11 +6,12 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/06 17:12:26 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/06 18:00:32 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int		check_alloc(int fd, char *rest, char **rest_alloc)
 {
@@ -51,32 +52,40 @@ char	*gnl_extractor(char *str, char c)
 	return (str2);
 }
 
-int		reader_ret(char **line, char **rest, char **str, char *str2)
+int		reader_ret(char **line, char **rest, char ***strz, int ret)
 {
-	if (str2 != NULL)
+	if ((*strz)[1] != NULL)
 	{
-		if (!(*line = gnl_extractor(*str, '\n')))
+		if (!(*line = gnl_extractor((*strz)[0], '\n')))
 			return (-1);
-		if (!(*rest = gnl_strdup(str2)))
+		if (!(*rest = gnl_strdup((*strz)[1])))
 			return (-1);
 	}
 	else
 	{
-		if (!(*line = gnl_strdup(*str)))
+		if (!(*line = gnl_strdup((*strz)[0])))
 			return (-1);
 	}
-	free(*str);
-	*str = NULL;
-	return (1);
+	if (ret == 0 && ((*rest == NULL) || ((*strz)[1] == NULL)))
+		ret = -2;
+	free((*strz)[0]);
+	(*strz)[0] = NULL;
+	free(*strz);
+	*strz = NULL;
+	if (ret == -2)
+		return (0);
+	else
+		return (1);
 }
 
 int		reader(int fd, char **line, char **rest)
 {
 	int		ret;
-	char	*str;
+	char	**strz;
 	char	buf[BUFFER_SIZE + 1];
-	char	*str2;
 
+	if (!(strz = (char**)malloc(sizeof(char*) * 3)))
+		return (-1);
 	gnl_memset(buf, '\0', BUFFER_SIZE + 1);
 	ret = read(fd, buf, BUFFER_SIZE);
 	if ((*rest == NULL || *rest[0] == '\0') && (ret == 0 || ret == -1))
@@ -84,16 +93,17 @@ int		reader(int fd, char **line, char **rest)
 		*line = NULL;
 		return (ret);
 	}
-	if (!(str = gnl_strjoin(rest, buf, 1)))
+	if (!(strz[0] = gnl_strjoin(rest, buf, 1)))
 		return (-1);
-	while (ret && gnl_strchr(str, '\n') == NULL)
+	while (ret && gnl_strchr(strz[0], '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
-		if (!(str = gnl_strjoin(&str, buf, 1)))
+		if (!(strz[0] = gnl_strjoin(&(strz[0]), buf, 1)))
 			return (-1);
 	}
-	str2 = gnl_strchr(str, '\n');
-	return (reader_ret(line, rest, &str, str2));
+//	printf("ret : %d\n", ret);
+	strz[1] = gnl_strchr(strz[0], '\n');
+	return (reader_ret(line, rest, &strz, ret));
 }
 
 int		get_next_line(int fd, char **line)
