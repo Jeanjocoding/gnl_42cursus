@@ -54,7 +54,7 @@ char	*gnl_extractor(char *str, char c)
 
 int		reader_ret(char **line, char **rest, char ***strz, int ret)
 {
-	if ((*strz)[1] != NULL)
+	if ((*strz)[1] != NULL && ((*strz)[1])[0] != '\0')
 	{
 		if (!(*line = gnl_extractor((*strz)[0], '\n')))
 			return (-1);
@@ -63,10 +63,11 @@ int		reader_ret(char **line, char **rest, char ***strz, int ret)
 	}
 	else
 	{
+		*rest = NULL;
 		if (!(*line = gnl_strdup((*strz)[0])))
 			return (-1);
 	}
-	if (ret == 0 && ((*rest == NULL) || ((*strz)[1] == NULL)))
+	if (ret == 0 && *rest == NULL) /*&& (gnl_strchr((*strz)[1], '\n') == NULL || gnl_strchr(gnl_strchr((*strz)[1], '\n'), '\n') == NULL))*/
 		ret = -2;
 	free((*strz)[0]);
 	(*strz)[0] = NULL;
