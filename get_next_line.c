@@ -12,20 +12,10 @@
 
 #include "get_next_line.h"
 
-int		check_alloc(int fd, char *rest, char **rest_alloc)
+void	gnl_strdel(char **str)
 {
-	char	buf[BUFFER_SIZE + 1];
-
-	if (fd < 0 || fd > MAX_FD || BUFFER_SIZE < 1 || read(fd, buf, 0) == -1)
-		return (-1);
-	if (rest != NULL && rest[0] != '\0')
-	{
-		if (!(*rest_alloc = gnl_strdup(rest, 0)))
-			return (-1);
-	}
-	else
-		*rest_alloc = NULL;
-	return (0);
+	free(*str);
+	*str = NULL;
 }
 
 char	*gnl_extractor(char *str, char c)
@@ -74,9 +64,12 @@ int		reader(int fd, char **line, char **rest)
 {
 	int		ret;
 	char	*str;
-	char	buf[BUFFER_SIZE + 1];
+//	char	buf[BUFFER_SIZE + 1];
+	char	*buf;
 
-	gnl_memset(buf, '\0', BUFFER_SIZE);
+	if (!(buf = gnl_strdup(" ", BUFFER_SIZE + 1)))
+		return (-1);
+//	gnl_memset(buf, '\0', BUFFER_SIZE);
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
@@ -86,28 +79,35 @@ int		reader(int fd, char **line, char **rest)
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1)))
 		return (-1);
+	gnl_memset(buf, '\0', gnl_strlen(buf));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		buf[ret] = '\0';
 		if (!(str = gnl_strjoin(&str, buf, 1)))
 			return (-1);
+		gnl_memset(buf, '\0', gnl_strlen(buf));
 	}
+	gnl_strdel(&buf);
 	return (reader_ret(line, rest, &str, ret));
 }
 
 int		get_next_line(int fd, char **line)
 {
 	static char	*rest[MAX_FD];
-	char		buf[BUFFER_SIZE];
+	char		*buf;
+//	char		buf[BUFFER_SIZE + 1];
 	int			ret;
 	int			i;
 
 	i = -1;
+	if (!(buf = gnl_strdup(" ", 1)))
+		return (-1);
 	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
 		|| read(fd, buf, 0) == -1)
 		return (-1);
 	ret = reader(fd, line, &rest[fd]);
+	gnl_strdel(&buf);
 	if (ret == 0)
 	{
 		free(rest[fd]);
