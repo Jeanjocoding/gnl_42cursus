@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 void	gnl_strdel(char **str)
 {
@@ -49,10 +50,14 @@ int		reader_ret(char **line, char **rest, char **str, int ret)
 		if (!(*rest = gnl_strdup(gnl_strchr(*str, '\n'), 0)))
 			return (-1);
 		if (*rest == NULL || *rest[0] == '\0')
+		{
+			gnl_strdel(rest);
 			ret = BUFFER_SIZE;
+		}
 	}
 	else
-		*rest = NULL;
+		gnl_strdel(rest);
+		//*rest = NULL;
 	free(*str);
 	str = NULL;
 	if (ret < BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
@@ -74,6 +79,7 @@ int		reader(int fd, char **line, char **rest)
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
 		gnl_strdel(&buf);
+		gnl_strdel(rest);
 		if (!(*line = gnl_strdup(" ", 1)))
 			return (-1);
 		return (0);
@@ -81,6 +87,7 @@ int		reader(int fd, char **line, char **rest)
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1)))
 		return (-1);
+//	printf("rest : %s\n", *rest);
 //	gnl_memset(buf, '\0', gnl_strlen(buf));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
@@ -111,9 +118,6 @@ int		get_next_line(int fd, char **line)
 	ret = reader(fd, line, &rest[fd]);
 	gnl_strdel(&buf);
 	if (ret == 0)
-	{
-		free(rest[fd]);
-		rest[fd] = NULL;
-	}
+		gnl_strdel(&rest[fd]);
 	return (ret);
 }
