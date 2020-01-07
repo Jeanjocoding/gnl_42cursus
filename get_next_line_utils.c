@@ -6,12 +6,11 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/07 16:22:28 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:48:23 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 size_t	gnl_strlen(const char *str)
 {

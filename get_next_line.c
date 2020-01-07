@@ -6,12 +6,11 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/07 16:32:21 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:48:08 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 int		check_alloc(int fd, char *rest, char **rest_alloc)
 {
