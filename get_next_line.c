@@ -73,7 +73,9 @@ int		reader(int fd, char **line, char **rest)
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
-		*line = gnl_strdup(" ", 1);
+		gnl_strdel(&buf);
+		if (!(*line = gnl_strdup(" ", 1)))
+			return (-1);
 		return (0);
 	}
 	buf[ret] = '\0';
