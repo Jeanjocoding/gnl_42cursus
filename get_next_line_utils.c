@@ -6,11 +6,12 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/06 12:50:25 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/07 11:57:03 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 size_t	gnl_strlen(const char *str)
 {
@@ -48,10 +49,11 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 
 	i = 0;
 	j = 0;
+//	printf(" s1 : %s - s2 : %s\n", *s1, s2);
 	if (*s1 == NULL && s2 != NULL)
-		return (gnl_strdup(s2));
+		return (gnl_strdup(s2, 0));
 	if (*s1 != NULL && s2 == NULL)
-		return (gnl_strdup(*s1));
+		return (gnl_strdup(*s1, 0));
 	if (!(scat = (char*)malloc(sizeof(char) *
 		(gnl_strlen(*s1) + gnl_strlen(s2)) + 1)))
 		return (NULL);
@@ -69,13 +71,22 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 	return (scat);
 }
 
-char	*gnl_strdup(const char *s1)
+char	*gnl_strdup(const char *s1, int empty)
 {
 	unsigned int	i;
 	unsigned int	len;
 	char			*mlc;
 
 	i = 0;
+	if (empty > 0)
+	{
+		if (!(mlc = (char*)malloc(sizeof(char) * (empty))))
+			return (NULL);
+		gnl_memset(mlc, '\0', empty);
+		return (mlc);
+	}
+	if (s1 == NULL)
+		return (NULL);
 	len = gnl_strlen(s1);
 	if (!(mlc = (char*)malloc(sizeof(char) * (len + 1))))
 		return (NULL);

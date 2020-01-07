@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/07 13:17:36 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/07 12:26:50 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,57 +51,94 @@ char	*gnl_extractor(char *str, char c)
 	return (str2);
 }
 
-int		reader_ret(char **line, char **rest, char *str, int ret)
+int		reader_ret(char **line, char **rest, char ***strz, int ret)
 {
-	if (!(*line = gnl_extractor(str, '\n')))
+//	printf(" strz 0 : %s\n", (*strz)[0]);
+	if (!(*line = gnl_extractor((*strz)[0], '\n')))
 		return (-1);
-	if (!(*rest = gnl_strdup(gnl_strchr(str, '\n'))))
-		return (-1);
-	if (ret == 0 && (*rest == NULL	|| *rest[0] == '\0'))
+//	printf(" line insider reader_ret : %s\n", *line);
+	if ((*strz)[1] != NULL && ((*strz)[1])[0] != '\0')
+	{
+//		printf(" line insider reader_ret : %s\n", line);
+//		if (!(*line = gnl_extractor((*strz)[0], '\n')))
+//			return (-1);
+//		printf(" line insider reader_ret : %s - ", *line);
+		if (!(*rest = gnl_strdup((*strz)[1], 0)))
+			return (-1);
+	}
+	else
+	{
+//		gnl_memset(*rest, '\0', 1);
+		*rest = NULL;
+//		if (!(*line = gnl_extractor((*strz)[0], '\n')))
+//			return (-1);
+	}
+	if (ret == 0 && *rest == NULL)
+		ret = -2;
+	free((*strz)[0]);
+	(*strz)[0] = NULL;
+	free(*strz);
+	*strz = NULL;
+	if (ret == -2)
 		return (0);
-	return (1);
+	else
+		return (1);
 }
 
 int		reader(int fd, char **line, char **rest)
 {
 	int		ret;
-	char	*str;
+	char	**strz;
 	char	buf[BUFFER_SIZE + 1];
 
-	gnl_memset(buf, '\0', BUFFER_SIZE);
+	if (!(strz = (char**)malloc(sizeof(char*) * 3)))
+		return (-1);
+	gnl_memset(buf, '\0', BUFFER_SIZE + 1);
 	ret = read(fd, buf, BUFFER_SIZE);
-	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
+	if ((*rest == NULL || *rest[0] == '\0') && (ret == 0 || ret == -1))
 	{
-		*line = gnl_strdup(" ", 1);
-		return (0);
+//		printf("hello%s\n", "");
+		*line = gnl_strdup(" ", 1);;
+		return (ret);
 	}
-	if (!(str = gnl_strjoin(rest, buf, 1)))
-		return (NULL);
-	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
+//	printf(" first join %s : ", "");
+	if (!(strz[0] = gnl_strjoin(rest, buf, 1)))
+		return (-1);
+	while (ret && gnl_strchr(strz[0], '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		buf[ret] = '\0';
-		if (!(str = gnl_strjoin(rest, buf, 1)))
-			return (NULL);
+//		printf(" second join %s ", "");
+		if (ret != 0)
+		{
+			if (!(strz[0] = gnl_strjoin(&(strz[0]), buf, 1)))
+				return (-1);
+		}
 	}
-	return (reader_ret(line, rest, str, ret));
+	strz[1] = gnl_strdup(gnl_strchr(strz[0], '\n'), 0);
+	return (reader_ret(line, rest, &strz, ret));
 }
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*rest[MAX_FD];
+	static char	rest[MAX_FD][BUFFER_SIZE + 1];
 	char		*rest_alloc;
 	int			ret;
 	int			i;
 
 	i = -1;
-	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1 || read(fd, buf, 0) == -1)
+	if (check_alloc(fd, (char*)rest[fd], &rest_alloc) == -1 || line == NULL)
 		return (-1);
-	ret = reader(fd, line, rest[fd]);
-	if (ret == 0)
+	ret = reader(fd, line, &rest_alloc);
+	if (rest_alloc != NULL)
 	{
-		free(rest[fd]);
-		rest[fd] = NULL;
+		while (rest_alloc[++i])
+			rest[fd][i] = rest_alloc[i];
+		rest[fd][i] = '\0';
+		free(rest_alloc);
+		rest_alloc = NULL;
 	}
+	else
+		rest[fd][0] = '\0';
 	return (ret);
 }
