@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/07 11:57:03 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:22:28 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 
 	i = 0;
 	j = 0;
-//	printf(" s1 : %s - s2 : %s\n", *s1, s2);
 	if (*s1 == NULL && s2 != NULL)
 		return (gnl_strdup(s2, 0));
 	if (*s1 != NULL && s2 == NULL)
