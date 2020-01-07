@@ -79,14 +79,14 @@ int		reader(int fd, char **line, char **rest)
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1)))
 		return (-1);
-	gnl_memset(buf, '\0', gnl_strlen(buf));
+//	gnl_memset(buf, '\0', gnl_strlen(buf));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		buf[ret] = '\0';
 		if (!(str = gnl_strjoin(&str, buf, 1)))
 			return (-1);
-		gnl_memset(buf, '\0', gnl_strlen(buf));
+//		gnl_memset(buf, '\0', gnl_strlen(buf));
 	}
 	gnl_strdel(&buf);
 	return (reader_ret(line, rest, &str, ret));

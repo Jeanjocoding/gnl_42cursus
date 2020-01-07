@@ -78,9 +78,9 @@ char	*gnl_strdup(const char *s1, int empty)
 	i = 0;
 	if (empty > 0)
 	{
-		if (!(mlc = (char*)malloc(sizeof(char) * (empty))))
+		if (!(mlc = (char*)malloc(sizeof(char) * (empty + 1))))
 			return (NULL);
-		gnl_memset(mlc, '\0', empty);
+		gnl_memset(mlc, '\0', 1);
 		return (mlc);
 	}
 	if (s1 == NULL)
