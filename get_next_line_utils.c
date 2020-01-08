@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/07 16:48:23 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/08 11:57:35 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*gnl_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*gnl_strjoin(char **s1, char const *s2, int fr)
+char	*gnl_strjoin(char **s1, char *s2, int fr, int ret)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -52,6 +52,7 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 		return (gnl_strdup(s2, 0));
 	if (*s1 != NULL && s2 == NULL)
 		return (gnl_strdup(*s1, 0));
+	s2[ret] = '\0';
 	if (!(scat = (char*)malloc(sizeof(char) *
 		(gnl_strlen(*s1) + gnl_strlen(s2)) + 1)))
 		return (NULL);
@@ -62,10 +63,7 @@ char	*gnl_strjoin(char **s1, char const *s2, int fr)
 		scat[j++] = s2[i++];
 	scat[j] = '\0';
 	if (fr == 1)
-	{
-		free(*s1);
-		*s1 = NULL;
-	}
+		gnl_strdel(s1);
 	return (scat);
 }
 
