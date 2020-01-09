@@ -6,12 +6,11 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/09 14:22:41 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/09 15:32:47 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
 
 int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 {
@@ -72,7 +71,7 @@ int		reader_ret(char **line, char **rest, char **str, int ret)
 	else
 		gnl_free_return(rest, line, str, 1);
 	free(*str);
-	str = NULL;
+	*str = NULL;
 	if (ret < BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
 		return (0);
 	return (1);
@@ -84,19 +83,19 @@ int		reader(int fd, char **line, char **rest)
 	char	*str;
 	char	*buf;
 
-	if (!(buf = gnl_strdup(" ", BUFFER_SIZE + 1)))
-		return (-1);
+	if (!(buf = gnl_strdup(" ", BUFFER_SIZE)))
+		return (gnl_free_return(rest, &str, &buf, 1));
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
-		gnl_free_return(&buf, line, &rest[fd], 1);
+		gnl_free_return(&buf, line, rest, 1);
 		if (!(*line = gnl_strdup(" ", 1)))
 			return (gnl_free_return(rest, &str, &buf, 1));
 		return (0);
 	}
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
-		return (gnl_free_return(rest, &str, &buf, 3));
+		return (gnl_free_return(rest, &buf, &str, 2));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
