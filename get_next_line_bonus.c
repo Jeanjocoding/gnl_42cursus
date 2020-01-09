@@ -6,16 +6,31 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/08 16:08:46 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:22:41 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+#include <stdio.h>
 
-void	gnl_strdel(char **str)
+int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 {
-	free(*str);
-	*str = NULL;
+	if (value > 0)
+	{
+		free(*str1);
+		*str1 = NULL;
+	}
+	if (value > 1)
+	{
+		free(*str2);
+		*str2 = NULL;
+	}
+	if (value > 2)
+	{
+		free(*str3);
+		*str3 = NULL;
+	}
+	return (-1);
 }
 
 char	*gnl_extractor(char *str, char c)
@@ -43,19 +58,19 @@ char	*gnl_extractor(char *str, char c)
 int		reader_ret(char **line, char **rest, char **str, int ret)
 {
 	if (!(*line = gnl_extractor(*str, '\n')))
-		return (-1);
+		return (gnl_free_return(str, rest, line, 1));
 	if (gnl_strchr(*str, '\n') != NULL)
 	{
 		if (!(*rest = gnl_strdup(gnl_strchr(*str, '\n'), 0)))
-			return (-1);
+			return (gnl_free_return(str, line, rest, 1));
 		if (*rest == NULL || *rest[0] == '\0')
 		{
-			gnl_strdel(rest);
+			gnl_free_return(rest, line, str, 1);
 			ret = BUFFER_SIZE;
 		}
 	}
 	else
-		gnl_strdel(rest);
+		gnl_free_return(rest, line, str, 1);
 	free(*str);
 	str = NULL;
 	if (ret < BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
@@ -74,21 +89,21 @@ int		reader(int fd, char **line, char **rest)
 	ret = read(fd, buf, BUFFER_SIZE);
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
-		gnl_strdel(&buf);
+		gnl_free_return(&buf, line, &rest[fd], 1);
 		if (!(*line = gnl_strdup(" ", 1)))
-			return (-1);
+			return (gnl_free_return(rest, &str, &buf, 1));
 		return (0);
 	}
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
-		return (-1);
+		return (gnl_free_return(rest, &str, &buf, 3));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (!(str = gnl_strjoin(&str, buf, 1, ret)))
-			return (-1);
+			return (gnl_free_return(rest, &str, &buf, 3));
 	}
-	gnl_strdel(&buf);
+	gnl_free_return(&buf, line, rest, 1);
 	return (reader_ret(line, rest, &str, ret));
 }
 
@@ -101,13 +116,14 @@ int		get_next_line(int fd, char **line)
 
 	i = -1;
 	if (!(buf = gnl_strdup(" ", 1)))
-		return (-1);
+		return (gnl_free_return(&rest[fd], line, &buf, 2));
 	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
 		|| read(fd, buf, 0) == -1)
-		return (-1);
-	ret = reader(fd, line, &rest[fd]);
-	gnl_strdel(&buf);
+		return (gnl_free_return(&buf, &rest[fd], line, 1));
+	if ((ret = reader(fd, line, &rest[fd])) == -1)
+		return (gnl_free_return(&rest[fd], &buf, line, 3));
+	gnl_free_return(&buf, line, &rest[fd], 1);
 	if (ret == 0)
-		gnl_strdel(&rest[fd]);
+		gnl_free_return(&rest[fd], &buf, line, 1);
 	return (ret);
 }

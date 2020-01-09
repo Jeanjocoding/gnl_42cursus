@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/08 16:09:21 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:23:01 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*gnl_strjoin(char **s1, char *s2, int fr, int ret)
 		scat[j++] = s2[i++];
 	scat[j] = '\0';
 	if (fr == 1)
-		gnl_strdel(s1);
+		gnl_free_return(s1, &s2, &scat, 1);
 	return (scat);
 }
 
