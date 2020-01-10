@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/09 15:50:37 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/10 18:02:43 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ int		reader_ret(char **line, char **rest, char **str, int ret)
 		if (*rest == NULL || *rest[0] == '\0')
 		{
 			gnl_free_return(rest, line, str, 1);
-			ret = BUFFER_SIZE;
+			ret = (int)BUFFER_SIZE;
 		}
 	}
 	else
 		gnl_free_return(rest, line, str, 1);
 	free(*str);
 	*str = NULL;
-	if (ret < BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
+	if (ret < (int)BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
 		return (0);
 	return (1);
 }
@@ -83,9 +83,10 @@ int		reader(int fd, char **line, char **rest)
 	char	*str;
 	char	*buf;
 
-	if (!(buf = gnl_strdup(" ", BUFFER_SIZE)))
+	if (!(buf = gnl_strdup(" ", (int)BUFFER_SIZE)))
 		return (gnl_free_return(rest, &str, &buf, 1));
-	ret = read(fd, buf, BUFFER_SIZE);
+	if ((ret = read(fd, buf, BUFFER_SIZE)) == -1)
+		return (gnl_free_return(rest, &buf, &str, 2));
 	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
 	{
 		gnl_free_return(&buf, line, rest, 1);
@@ -96,7 +97,7 @@ int		reader(int fd, char **line, char **rest)
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
 		return (gnl_free_return(rest, &buf, &str, 2));
-	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
+	while (ret == (int)BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (!(str = gnl_strjoin(&str, buf, 1, ret)))
