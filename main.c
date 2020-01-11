@@ -5,13 +5,13 @@ int		main(int argc, char **argv)
 {
 	char	*line;
 	int		fd;
-	int		fd2;
+//	int		fd2;
 	int		ret;
 
-	if (argc == 3)
+	if (argc == 2)
 	{
 		fd = open(argv[1], O_RDONLY);
-		fd2 = open(argv[2], O_RDONLY);
+//		fd2 = open(argv[2], O_RDONLY);
 	}
 	else
 		fd = 0;
@@ -20,9 +20,9 @@ int		main(int argc, char **argv)
 	while (ret && ret != -1)
 	{
 		ret = get_next_line(fd, &line);
-		printf("%s\treturn value = %d\n", line, ret);
-		ret = get_next_line(fd2, &line);
-		printf("%s\treturn value = %d\n", line, ret);
+		printf("%s\n", line);
+//		ret = get_next_line(fd2, &line);
+//		printf("%s\treturn value = %d\n", line, ret);
 		free(line);
 		line = NULL;
 	}

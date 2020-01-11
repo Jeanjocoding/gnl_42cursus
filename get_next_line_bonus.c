@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/10 18:04:23 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/10 18:02:43 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ int		get_next_line(int fd, char **line)
 	i = -1;
 	if (!(buf = gnl_strdup(" ", 1)))
 		return (gnl_free_return(&rest[fd], line, &buf, 1));
-	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
-		|| read(fd, buf, 0) == -1)
+	if (fd < 0 || line == NULL || fd > MAX_FD || (int)BUFFER_SIZE < 1
+		|| (int)BUFFER_SIZE > 1000000000 || read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
 	if ((ret = reader(fd, line, &rest[fd])) == -1)
 		return (gnl_free_return(&rest[fd], &buf, line, 3));

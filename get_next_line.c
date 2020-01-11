@@ -117,8 +117,8 @@ int		get_next_line(int fd, char **line)
 	i = -1;
 	if (!(buf = gnl_strdup(" ", 1)))
 		return (gnl_free_return(&rest[fd], line, &buf, 1));
-	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
-		|| read(fd, buf, 0) == -1)
+	if (fd < 0 || line == NULL || fd > MAX_FD || (int)BUFFER_SIZE < 1
+		|| (int)BUFFER_SIZE > 1000000000 || read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
 	if ((ret = reader(fd, line, &rest[fd])) == -1)
 		return (gnl_free_return(&rest[fd], &buf, line, 3));
