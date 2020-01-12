@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <stdio.h>
+#include "get_next_line_bonus.h"
 
 int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 {
@@ -88,13 +87,6 @@ int		reader(int fd, char **line, char **rest)
 		return (gnl_free_return(rest, &str, &buf, 1));
 	if ((ret = read(fd, buf, BUFFER_SIZE)) == -1)
 		return (gnl_free_return(rest, &buf, &str, 2));
-	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
-	{
-		gnl_free_return(&buf, line, rest, 1);
-		if (!(*line = gnl_strdup(" ", 1)))
-			return (gnl_free_return(rest, &str, &buf, 1));
-		return (0);
-	}
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
 		return (gnl_free_return(rest, &buf, &str, 2));
