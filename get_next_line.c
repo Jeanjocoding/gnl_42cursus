@@ -87,13 +87,13 @@ int		reader(int fd, char **line, char **rest)
 		return (gnl_free_return(rest, &str, &buf, 1));
 	if ((ret = read(fd, buf, BUFFER_SIZE)) == -1)
 		return (gnl_free_return(rest, &buf, &str, 2));
-	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
-	{
-		gnl_free_return(&buf, line, rest, 1);
-		if (!(*line = gnl_strdup(" ", 1)))
-			return (gnl_free_return(rest, &str, &buf, 1));
-		return (0);
-	}
+//	if (ret == 0 && (*rest == NULL || *rest[0] == '\0'))
+//	{
+//		gnl_free_return(&buf, line, rest, 1);
+//		if (!(*line = gnl_strdup(" ", 1)))
+//			return (gnl_free_return(rest, &str, &buf, 1));
+//		return (0);
+//	}
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
 		return (gnl_free_return(rest, &buf, &str, 2));
@@ -118,7 +118,7 @@ int		get_next_line(int fd, char **line)
 	if (!(buf = gnl_strdup(" ", 1)))
 		return (gnl_free_return(&rest[fd], line, &buf, 1));
 	if (fd < 0 || line == NULL || fd > MAX_FD || (int)BUFFER_SIZE < 1
-		|| (int)BUFFER_SIZE > 1000000000 || read(fd, buf, 0) == -1)
+		|| read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
 	if ((ret = reader(fd, line, &rest[fd])) == -1)
 		return (gnl_free_return(&rest[fd], &buf, line, 3));

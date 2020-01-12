@@ -20,9 +20,7 @@ int		main(int argc, char **argv)
 	while (ret && ret != -1)
 	{
 		ret = get_next_line(fd, &line);
-		printf("%s\n", line);
-//		ret = get_next_line(fd2, &line);
-//		printf("%s\treturn value = %d\n", line, ret);
+		printf("%s\treturn value = %d\n", line, ret);
 		free(line);
 		line = NULL;
 	}
