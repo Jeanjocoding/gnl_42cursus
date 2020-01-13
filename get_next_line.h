@@ -6,12 +6,16 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:51:42 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 10:42:25 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 11:15:33 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
 
 # include <stdlib.h>
 # include <sys/types.h>
