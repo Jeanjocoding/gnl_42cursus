@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:49:34 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 10:22:18 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 10:42:04 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*gnl_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*gnl_strjoin(char **s1, char *s2, int fr, int ret)
+char	*gnl_strjoin(char **s1, char *s2, int fr, ssize_t ret)
 {
 	unsigned int	i;
 	unsigned int	j;

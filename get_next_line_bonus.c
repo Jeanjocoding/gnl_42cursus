@@ -6,11 +6,11 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 10:37:36 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 10:30:14 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 {

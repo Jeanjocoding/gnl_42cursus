@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:51:42 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 10:31:28 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 10:43:04 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 char		*gnl_strchr(const char *s, int c);
 char		*gnl_strnew(size_t size);
-char		*gnl_strjoin(char **s1, char *s2, int fr, int ret);
+char		*gnl_strjoin(char **s1, char *s2, int fr, ssize_t ret);
 char		*gnl_strdup(const char *s1, ssize_t empty);
 void		*gnl_memset(void *b, int c, size_t len);
 int			get_next_line(int fd, char **line);
