@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 16:22:28 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 18:03:03 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*gnl_extractor(char *str, char c)
 	return (str2);
 }
 
-int		reader_ret(char **line, char **rest, char **str, ssize_t ret)
+int		ft_reader_ret(char **line, char **rest, char **str, ssize_t ret)
 {
 	if (!(*line = gnl_extractor(*str, '\n')))
 		return (gnl_free_return(str, rest, line, 1));
@@ -77,7 +77,7 @@ int		reader_ret(char **line, char **rest, char **str, ssize_t ret)
 	return (1);
 }
 
-int		reader(int fd, char **line, char **rest)
+int		ft_reader(int fd, char **line, char **rest)
 {
 	ssize_t	ret;
 	char	*str;
@@ -98,7 +98,7 @@ int		reader(int fd, char **line, char **rest)
 			return (gnl_free_return(rest, &str, &buf, 3));
 	}
 	gnl_free_return(&buf, line, rest, 1);
-	return (reader_ret(line, rest, &str, ret));
+	return (ft_reader_ret(line, rest, &str, ret));
 }
 
 int		get_next_line(int fd, char **line)
@@ -114,7 +114,7 @@ int		get_next_line(int fd, char **line)
 	if (fd < 0 || line == NULL || fd > 256 || BUFFER_SIZE < 1
 		|| read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
-	if ((ret = reader(fd, line, &rest[fd])) == -1)
+	if ((ret = ft_reader(fd, line, &rest[fd])) == -1)
 		return (gnl_free_return(&rest[fd], &buf, line, 2));
 	gnl_free_return(&buf, line, &rest[fd], 1);
 	if (ret == 0)
