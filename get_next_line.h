@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:51:42 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 11:15:33 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 16:21:57 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <fcntl.h>
 # include <sys/uio.h>
 # include <unistd.h>
-
-# define MAX_FD 256
 
 char		*gnl_strchr(const char *s, int c);
 char		*gnl_strnew(size_t size);

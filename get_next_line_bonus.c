@@ -6,11 +6,11 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 11:03:34 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 16:24:50 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_linei_bonus.h"
 
 int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 {
@@ -103,7 +103,7 @@ int		reader(int fd, char **line, char **rest)
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*rest[MAX_FD];
+	static char	*rest[256];
 	char		*buf;
 	ssize_t		ret;
 	int			i;
@@ -111,11 +111,11 @@ int		get_next_line(int fd, char **line)
 	i = -1;
 	if (!(buf = gnl_strdup(" ", 1)))
 		return (gnl_free_return(&rest[fd], line, &buf, 1));
-	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
+	if (fd < 0 || line == NULL || fd > 256 || BUFFER_SIZE < 1
 		|| read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
 	if ((ret = reader(fd, line, &rest[fd])) == -1)
-		return (gnl_free_return(&rest[fd], &buf, line, 3));
+		return (gnl_free_return(&rest[fd], &buf, line, 2));
 	gnl_free_return(&buf, line, &rest[fd], 1);
 	if (ret == 0)
 		gnl_free_return(&rest[fd], &buf, line, 1);

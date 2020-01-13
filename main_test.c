@@ -1,29 +1,20 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int		main(int argc, char **argv)
+int		main(void)
 {
-	char	*line;
+	char	*str;
 	int		fd;
-//	int		fd2;
 	int		ret;
 
-	if (argc == 2)
+	fd = open("get_next_line.c", O_RDONLY);
+	while ((ret = get_next_line(fd, &str)))
 	{
-		fd = open(argv[1], O_RDONLY);
-//		fd2 = open(argv[2], O_RDONLY);
+		if (ret == -1)
+			return(printf("get_next_line exit with -1"));
+		printf("str :  %s _  ret : %d\n", str, ret);
+		free(str);
 	}
-	else
-		fd = 0;
-	line = NULL;
-	ret = 1;
-	while (ret && ret != -1)
-	{
-		ret = get_next_line(fd, &line);
-		printf("%s\treturn value = %d\n", line, ret);
-		free(line);
-		line = NULL;
-	}
-	close(fd);
+	printf("%s\n", str);
+	return (0);
 }
-
