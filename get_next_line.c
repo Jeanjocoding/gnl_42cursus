@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 10:30:14 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 11:02:18 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ int		reader(int fd, char **line, char **rest)
 		return (gnl_free_return(rest, &buf, &str, 2));
 	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
-		ret = read(fd, buf, BUFFER_SIZE);
+		if ((ret = read(fd, buf, BUFFER_SIZE)) == -1)
+			return (gnl_free_return(rest, &str, &buf, 3));
 		if (!(str = gnl_strjoin(&str, buf, 1, ret)))
 			return (gnl_free_return(rest, &str, &buf, 3));
 	}
