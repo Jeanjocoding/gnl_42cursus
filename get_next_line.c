@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/10 18:02:43 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/13 10:30:14 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*gnl_extractor(char *str, char c)
 	return (str2);
 }
 
-int		reader_ret(char **line, char **rest, char **str, int ret)
+int		reader_ret(char **line, char **rest, char **str, ssize_t ret)
 {
 	if (!(*line = gnl_extractor(*str, '\n')))
 		return (gnl_free_return(str, rest, line, 1));
@@ -65,32 +65,32 @@ int		reader_ret(char **line, char **rest, char **str, int ret)
 		if (*rest == NULL || *rest[0] == '\0')
 		{
 			gnl_free_return(rest, line, str, 1);
-			ret = (int)BUFFER_SIZE;
+			ret = BUFFER_SIZE;
 		}
 	}
 	else
 		gnl_free_return(rest, line, str, 1);
 	free(*str);
 	*str = NULL;
-	if (ret < (int)BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
+	if (ret < BUFFER_SIZE && (*rest == NULL || *rest[0] == '\0'))
 		return (0);
 	return (1);
 }
 
 int		reader(int fd, char **line, char **rest)
 {
-	int		ret;
+	ssize_t	ret;
 	char	*str;
 	char	*buf;
 
-	if (!(buf = gnl_strdup(" ", (int)BUFFER_SIZE)))
+	if (!(buf = gnl_strdup(" ", BUFFER_SIZE)))
 		return (gnl_free_return(rest, &str, &buf, 1));
 	if ((ret = read(fd, buf, BUFFER_SIZE)) == -1)
 		return (gnl_free_return(rest, &buf, &str, 2));
 	buf[ret] = '\0';
 	if (!(str = gnl_strjoin(rest, buf, 1, ret)))
 		return (gnl_free_return(rest, &buf, &str, 2));
-	while (ret == (int)BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
+	while (ret == BUFFER_SIZE && gnl_strchr(str, '\n') == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (!(str = gnl_strjoin(&str, buf, 1, ret)))
@@ -104,13 +104,13 @@ int		get_next_line(int fd, char **line)
 {
 	static char	*rest[MAX_FD];
 	char		*buf;
-	int			ret;
+	ssize_t		ret;
 	int			i;
 
 	i = -1;
 	if (!(buf = gnl_strdup(" ", 1)))
 		return (gnl_free_return(&rest[fd], line, &buf, 1));
-	if (fd < 0 || line == NULL || fd > MAX_FD || (int)BUFFER_SIZE < 1
+	if (fd < 0 || line == NULL || fd > MAX_FD || BUFFER_SIZE < 1
 		|| read(fd, buf, 0) == -1)
 		return (gnl_free_return(&buf, &rest[fd], line, 1));
 	if ((ret = reader(fd, line, &rest[fd])) == -1)
