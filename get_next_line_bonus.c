@@ -6,13 +6,13 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/13 18:03:35 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/14 12:02:01 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int		gnl_free_return(char **str1, char **str2, char **str3, int value)
+int			gnl_free_return(char **str1, char **str2, char **str3, int value)
 {
 	if (value > 0)
 	{
@@ -32,7 +32,7 @@ int		gnl_free_return(char **str1, char **str2, char **str3, int value)
 	return (-1);
 }
 
-char	*gnl_extractor(char *str, char c)
+static char	*gnl_extractor(char *str, char c)
 {
 	int		i;
 	int		j;
@@ -54,7 +54,7 @@ char	*gnl_extractor(char *str, char c)
 	return (str2);
 }
 
-int		ft_reader_ret(char **line, char **rest, char **str, ssize_t ret)
+static int	ft_reader_ret(char **line, char **rest, char **str, ssize_t ret)
 {
 	if (!(*line = gnl_extractor(*str, '\n')))
 		return (gnl_free_return(str, rest, line, 1));
@@ -77,7 +77,7 @@ int		ft_reader_ret(char **line, char **rest, char **str, ssize_t ret)
 	return (1);
 }
 
-int		ft_reader(int fd, char **line, char **rest)
+static int	ft_reader(int fd, char **line, char **rest)
 {
 	ssize_t	ret;
 	char	*str;
@@ -101,7 +101,7 @@ int		ft_reader(int fd, char **line, char **rest)
 	return (ft_reader_ret(line, rest, &str, ret));
 }
 
-int		get_next_line(int fd, char **line)
+int			get_next_line(int fd, char **line)
 {
 	static char	*rest[256];
 	char		*buf;
