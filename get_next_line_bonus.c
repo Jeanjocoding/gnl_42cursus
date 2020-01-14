@@ -6,7 +6,7 @@
 /*   By: tlucille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 12:44:43 by tlucille          #+#    #+#             */
-/*   Updated: 2020/01/14 12:02:01 by tlucille         ###   ########.fr       */
+/*   Updated: 2020/01/14 16:21:11 by tlucille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static char	*gnl_extractor(char *str, char c)
 		i++;
 	if (!(str2 = (char*)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
-	gnl_memset(str2, '\0', i + 1);
 	while (j < i)
 	{
 		str2[j] = str[j];
